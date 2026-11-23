@@ -38,3 +38,13 @@ Incluye autenticación, búsqueda por nombre y exportación de contactos a CSV.
 - No hacer commit ni push.
 
 # Lecciones aprendidas
+
+- **Ejecución:** antes de dar por terminado un cambio, verifica que el proyecto pueda configurarse y ejecutarse siguiendo instrucciones completas y reproducibles; mantén actualizados el README y `.env.example`, y ejecuta una prueba de humo.
+- **Validación de entradas:** valida todos los campos en el servidor, incluidos formato y límites, y comprueba explícitamente la búsqueda con mayúsculas y tildes cuando corresponda.
+- **Contraseñas y hash:** nunca guardes contraseñas en texto plano; usa funciones de hash diseñadas para contraseñas y prueba tanto el registro como el inicio de sesión.
+- **Secretos y claves:** no incluyas secretos ni claves por defecto en el código; cárgalos desde el entorno, falla claramente si falta un secreto requerido y conserva los archivos locales fuera de Git.
+- **Control de acceso:** en cada lectura o modificación de datos privados, filtra por el usuario autenticado; prueba que una cuenta no pueda consultar, editar, borrar ni exportar datos de otra.
+- **Dependencias y alucinación:** verifica que cada dependencia y API exista, sea compatible y se use realmente; documenta el motivo de agregar paquetes y evita incorporar dependencias innecesarias.
+- **Pruebas:** ejecuta las pruebas existentes y agrega casos para los comportamientos y límites que cambies; no declares éxito basándote solo en que la aplicación inicia.
+- **Manejo de errores:** trata de forma explícita los errores esperados y valida sus respuestas; no ocultes fallos inesperados ni los conviertas en respuestas de éxito.
+- **Estructura:** mantén responsabilidades claras entre rutas, persistencia, plantillas y recursos estáticos; evita concentrar lógica no relacionada en un solo módulo y sigue la escala y los patrones del proyecto.
