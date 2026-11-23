@@ -82,7 +82,7 @@ class ContactsAppTests(unittest.TestCase):
         )
         self.post("/logout", {})
         self.register_and_login("otra@example.com")
-        self.assertNotIn("Privado".encode(), self.client.get("/contacts").data)
+        self.assertNotIn(b"Privado", self.client.get("/contacts").data)
         response = self.client.get("/contacts/export.csv")
         rows = list(csv.reader(io.StringIO(response.get_data(as_text=True).lstrip("\ufeff"))))
         self.assertEqual(rows, [["Nombre", "Correo", "Teléfono", "Notas"]])
@@ -92,7 +92,7 @@ class ContactsAppTests(unittest.TestCase):
             "/register", {"email": "corta@example.com", "password": "123"}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn("al menos 10 caracteres".encode(), response.data)
+        self.assertIn(b"al menos 10 caracteres", response.data)
 
 
 if __name__ == "__main__":
