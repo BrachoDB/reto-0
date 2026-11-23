@@ -134,7 +134,8 @@ def create_app(test_config=None):
             """
             SELECT id, name, email, phone, notes
             FROM contacts
-            WHERE user_id = ? AND name LIKE ? ESCAPE '\\'
+            WHERE user_id = ?
+              AND unicode_casefold(name) LIKE unicode_casefold(?) ESCAPE '\\'
             ORDER BY name COLLATE NOCASE
             """,
             (g.user["id"], f"%{escaped_search}%"),
@@ -252,6 +253,7 @@ def safe_csv_cell(value):
 def get_db():
     if "db" not in g:
         g.db = sqlite3.connect(current_app.config["DATABASE"])
+        g.db.create_function("unicode_casefold", 1, str.casefold)
         g.db.row_factory = sqlite3.Row
         g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
