@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Mis contactos · Agenda Clara{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">TU ESPACIO PERSONAL</p>
+    <h1>Mis contactos <span class="count">{{ contacts|length }}</span></h1>
+    <p class="muted">Personas importantes, siempre a mano.</p>
+  </div>
+  <a class="button primary" href="{{ url_for('edit_contact') }}">＋ Nuevo contacto</a>
+</div>
+<section class="toolbar">
+  <form class="search-form" method="get" action="{{ url_for('contacts') }}">
+    <label class="sr-only" for="search">Buscar por nombre</label>
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input id="search" type="search" name="q" value="{{ search }}" placeholder="Buscar por nombre…" maxlength="100">
+    {% if search %}<a class="clear-search" href="{{ url_for('contacts') }}">Limpiar</a>{% endif %}
+    <button class="button search-button" type="submit">Buscar</button>
+  </form>
+  <a class="export-link" href="{{ url_for('export_contacts') }}">↓ Exportar CSV</a>
+</section>
+{% if contacts %}
+  <section class="contact-grid" aria-label="Lista de contactos">
+    {% for contact in contacts %}
+      <article class="contact-card">
+        <div class="avatar" aria-hidden="true">{{ contact.name[0]|upper }}</div>
+        <div class="contact-main">
+          <h2>{{ contact.name }}</h2>
+          {% if contact.email %}<p><span aria-hidden="true">✉</span> {{ contact.email }}</p>{% endif %}
+          {% if contact.phone %}<p><span aria-hidden="true">☎</span> {{ contact.phone }}</p>{% endif %}
+          {% if contact.notes %}<p class="notes">{{ contact.notes }}</p>{% endif %}
+        </div>
+        <div class="card-actions">
+          <a href="{{ url_for('edit_contact', contact_id=contact.id) }}">Editar</a>
+          <form method="post" action="{{ url_for('delete_contact', contact_id=contact.id) }}" onsubmit="return confirm('¿Eliminar este contacto?')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="danger-link">Eliminar</button>
+          </form>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+{% else %}
+  <section class="empty-state">
+    <div class="empty-icon" aria-hidden="true">♡</div>
+    {% if search %}
+      <h2>No encontramos resultados</h2>
+      <p>Prueba con otro nombre o <a href="{{ url_for('contacts') }}">limpia la búsqueda</a>.</p>
+    {% else %}
+      <h2>Tu agenda comienza aquí</h2>
+      <p>Añade tu primer contacto para tener su información siempre disponible.</p>
+      <a class="button primary" href="{{ url_for('edit_contact') }}">Añadir primer contacto</a>
+    {% endif %}
+  </section>
+{% endif %}
+{% endblock %}

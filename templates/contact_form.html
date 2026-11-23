@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ "Editar contacto" if contact else "Nuevo contacto" }} · Agenda Clara{% endblock %}
+{% block content %}
+<section class="form-card">
+  <a class="back-link" href="{{ url_for('contacts') }}">← Volver a mis contactos</a>
+  <p class="eyebrow">TU AGENDA PERSONAL</p>
+  <h1>{{ "Editar contacto" if contact else "Nuevo contacto" }}</h1>
+  <p class="muted">Guarda los datos que quieras recordar.</p>
+  <form method="post" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="name">Nombre <span class="required">*</span></label>
+    <input id="name" name="name" type="text" maxlength="120" value="{{ contact.name if contact else '' }}" required autofocus>
+    <label for="email">Correo electrónico</label>
+    <input id="email" name="email" type="email" maxlength="254" value="{{ contact.email if contact else '' }}">
+    <label for="phone">Teléfono</label>
+    <input id="phone" name="phone" type="tel" maxlength="50" value="{{ contact.phone if contact else '' }}">
+    <label for="notes">Notas</label>
+    <textarea id="notes" name="notes" rows="4" maxlength="2000" placeholder="Detalles que quieras recordar…">{{ contact.notes if contact else '' }}</textarea>
+    <div class="form-actions">
+      <a class="button secondary" href="{{ url_for('contacts') }}">Cancelar</a>
+      <button class="button primary" type="submit">{{ "Guardar cambios" if contact else "Guardar contacto" }}</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
